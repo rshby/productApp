@@ -6,5 +6,5 @@ import (
 )
 
 type IProductRepository interface {
-	Insert(ctx context.Context, input *entity.Product) // TODO : lengkapi return nya belum
+	Insert(ctx context.Context, input *entity.Product) (*entity.Product, error)
 }

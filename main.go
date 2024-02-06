@@ -1,11 +1,13 @@
 package main
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/opentracing/opentracing-go"
 	"productApp/app/config"
 	"productApp/app/logging"
 	"productApp/app/tracing"
 	"productApp/database"
+	"productApp/server"
 )
 
 func main() {
@@ -21,7 +23,14 @@ func main() {
 	opentracing.SetGlobalTracer(tracer)
 
 	// connect to DB
-	database.ConnectDB(cfg, logConsole)
+	db := database.ConnectDB(cfg, logConsole)
 
-	logConsole.Info(cfg.GetConfig().Logging)
+	// create validate
+	validate := validator.New()
+
+	// run server
+	appServer := server.NewAppServer(cfg, validate, db)
+	if err := appServer.RunServer(); err != nil {
+		logConsole.Fatalf("cant run server : %v", err)
+	}
 }
