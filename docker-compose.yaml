@@ -1,0 +1,41 @@
+version: "3.8"
+
+networks:
+  product-network:
+    name: product-network
+    driver: bridge
+
+services:
+  product-mysql:
+    image: mysql:latest
+    container_name: product-mysql
+    restart: on-failure
+    ports:
+      - target: 3306
+        published: 3306
+        protocol: tcp
+        mode: host
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - product-network
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  product-jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: product-jaeger
+    restart: on-failure
+    ports:
+      - target: 16686
+        published: 16686
+        protocol: tcp
+        mode: host
+      - target: 6831
+        published: 6831
+        protocol: udp
+        mode: host
+    networks:
+      - product-network
+    depends_on:
+      - product-mysql
