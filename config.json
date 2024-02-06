@@ -1,0 +1,21 @@
+{
+  "app" : {
+    "name" : "product App",
+    "author" : "Reo Sahobby",
+    "port" : 5005
+  },
+  "database" : {
+    "host" : "localhost",
+    "user" : "root",
+    "password" : "root",
+    "port" : 3306,
+    "name" : "product_db"
+  },
+  "jaeger" : {
+    "host" : "localhost",
+    "port" : 6831
+  },
+  "logging" : {
+    "path" : "/app/log/log_product.log"
+  }
+}
