@@ -11,8 +11,8 @@ type ProductServiceMock struct {
 }
 
 // function provider
-func NewProductServiceMock() *ProductRepoMock {
-	return &ProductRepoMock{mock.Mock{}}
+func NewProductServiceMock() *ProductServiceMock {
+	return &ProductServiceMock{mock.Mock{}}
 }
 
 // method implementasi add product
@@ -25,4 +25,10 @@ func (p *ProductServiceMock) AddProduct(ctx context.Context, request *dto.Create
 	}
 
 	return value.(*dto.CreateProductResponse), nil
+}
+
+// method implementasi get list products
+func (p *ProductServiceMock) GetProducts(ctx context.Context, sort string, order string) ([]dto.ProductDetailResponse, error) {
+	//TODO implement me
+	panic("implement me")
 }

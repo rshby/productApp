@@ -89,3 +89,44 @@ func (p *ProductHandler) AddProduct(ctx *fiber.Ctx) error {
 		Data:       product,
 	})
 }
+
+// method get list products
+func (p *ProductHandler) GetProducts(ctx *fiber.Ctx) error {
+	span, ctxTracing := opentracing.StartSpanFromContext(ctx.Context(), "Handler GetProducts")
+	defer span.Finish()
+
+	// get query
+	sort := ctx.Query("sort", "date")
+	order := ctx.Query("order", "DESC")
+
+	// call procedure in service
+	products, err := p.ProductService.GetProducts(ctxTracing, sort, order)
+	if err != nil {
+		var statusCode int
+		switch err.(type) {
+		case *customError.NotFoundError:
+			statusCode = http.StatusNotFound
+		case *customError.BadRequestError:
+			statusCode = http.StatusBadRequest
+		default:
+			statusCode = http.StatusInternalServerError
+		}
+
+		ctx.Status(statusCode)
+		return ctx.JSON(&dto.ApiResponse{
+			StatusCode: statusCode,
+			Status:     helper.CodeToSatatus(statusCode),
+			Message:    err.Error(),
+		})
+	}
+
+	// success get data
+	statusCode := http.StatusOK
+	ctx.Status(statusCode)
+	return ctx.JSON(&dto.ApiResponse{
+		StatusCode: statusCode,
+		Status:     helper.CodeToSatatus(statusCode),
+		Message:    "success get products",
+		Data:       products,
+	})
+}

@@ -7,4 +7,5 @@ import (
 
 type IProductService interface {
 	AddProduct(ctx context.Context, request *dto.CreateProductRequest) (*dto.CreateProductResponse, error)
+	GetProducts(ctx context.Context, sort string, order string) ([]dto.ProductDetailResponse, error)
 }

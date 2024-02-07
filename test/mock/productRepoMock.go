@@ -26,3 +26,18 @@ func (p *ProductRepoMock) Insert(ctx context.Context, input *entity.Product) (*e
 
 	return value.(*entity.Product), nil
 }
+
+func (p *ProductRepoMock) GetProductsSortByDate(ctx context.Context, order string) ([]entity.Product, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (p *ProductRepoMock) GetProductSortByPrice(ctx context.Context, order string) ([]entity.Product, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (p *ProductRepoMock) GetProductSortByName(ctx context.Context, order string) ([]entity.Product, error) {
+	//TODO implement me
+	panic("implement me")
+}
