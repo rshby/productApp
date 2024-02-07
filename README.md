@@ -107,4 +107,5 @@ Response :
 Arsitektur code (_design pattern_) yang digunakan dalam source code aplikasi ini adalah clean code yang menggunakan beberapa layer seperti repository, service, dan handler.<br>
 Sedangkan untuk arsitektur sistem yang digunakan adalah _microservices_ dan dapat dijalankan dari beberapa node dalam load balancer. Sehingga dapat menangani traffic request yang tinggi dan menjamin _high availability_. <br>
 Gambar Arsitektur yang digunakan dapat dilihat pada gambar di bawah ini : <br>
-[<img src="https://drive.google.com/uc?export=view&id=16E__3ly5yAM4a54WSviNY9Q3FPftks2t" width="550"/>](https://drive.google.com/uc?export=view&id=16E__3ly5yAM4a54WSviNY9Q3FPftks2t)
+[<img src="https://drive.google.com/uc?export=view&id=16E__3ly5yAM4a54WSviNY9Q3FPftks2t" width="300"/>](https://drive.google.com/uc?export=view&id=16E__3ly5yAM4a54WSviNY9Q3FPftks2t) <br>
+[<img src="https://drive.google.com/uc?export=view&id=1xQk1LO8CnqnXjGKf1bbOidXwud9iqFPS" width="400"/>](https://drive.google.com/uc?export=view&id=1xQk1LO8CnqnXjGKf1bbOidXwud9iqFPS)
