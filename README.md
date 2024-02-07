@@ -55,6 +55,8 @@ Response :
 ### 2. Get List Products And Sorting
 Terdapat beberapa pilihan sorting : `name, price, date` <br>
 Secara default apabila parameter `sort` dan `order` tidak diisi, makan akan mengurutkan berdasarkan date DESC (product yang paling baru). <br>
+Pilihan option untuk parameter `sort` adalah : `date`, `price`, `name` <br>
+Pilihan option utuk parameter `order` adalah : `asc` atau `desc` <br>
 Method `GET` endpoint `http://localhost:5005/api/v1/products?order=desc&sort=price`<br>
 Response :
 ```
@@ -109,3 +111,17 @@ Sedangkan untuk arsitektur sistem yang digunakan adalah _microservices_ dan dapa
 Gambar Arsitektur yang digunakan dapat dilihat pada gambar di bawah ini : <br>
 [<img src="https://drive.google.com/uc?export=view&id=16E__3ly5yAM4a54WSviNY9Q3FPftks2t" width="300"/>](https://drive.google.com/uc?export=view&id=16E__3ly5yAM4a54WSviNY9Q3FPftks2t) <br>
 [<img src="https://drive.google.com/uc?export=view&id=1xQk1LO8CnqnXjGKf1bbOidXwud9iqFPS" width="400"/>](https://drive.google.com/uc?export=view&id=1xQk1LO8CnqnXjGKf1bbOidXwud9iqFPS)
+
+## Unit Test
+Aplikasi ini juga mendukung Unit Test. <br>
+Untuk menjalankan semua unit test dapat menggunakan syntax `go test -cover -v ./test`
+
+## Tracing
+Aplikasi ini mendukung tracing menggunakan jaeger. <br>
+Anda dapat membua dashboar jaeger dengan url `http://localhost:16686` <br>
+Dengan menggunakan tracing ini kita akan lebih mudah mengetahui masing-masing proses yang jalan di apliasi ini. <br>
+Harapannya penambahan tracing ini akan mempermudah kita dalam menemukan root cause ketika apliasi ini dirasa memiliki response time yang lama.<br>
+[<img src="https://drive.google.com/uc?export=view&id=1HntRZ0ShdjtDxGK-MFXWbS3rpIKbv-PN" width="400"/>](https://drive.google.com/uc?export=view&id=1HntRZ0ShdjtDxGK-MFXWbS3rpIKbv-PN) <br>
+[<img src="https://drive.google.com/uc?export=view&id=1xyfRtxGjN1nIXq9e87c3qPQN5f_dpVPI" width="400"/>](https://drive.google.com/uc?export=view&id=1xyfRtxGjN1nIXq9e87c3qPQN5f_dpVPI)
+
+## Log With ELK (Filebeat - Logstash - Elastic - Kibana)
