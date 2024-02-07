@@ -125,3 +125,7 @@ Harapannya penambahan tracing ini akan mempermudah kita dalam menemukan root cau
 [<img src="https://drive.google.com/uc?export=view&id=1xyfRtxGjN1nIXq9e87c3qPQN5f_dpVPI" width="400"/>](https://drive.google.com/uc?export=view&id=1xyfRtxGjN1nIXq9e87c3qPQN5f_dpVPI)
 
 ## Log With ELK (Filebeat - Logstash - Elastic - Kibana)
+Aplikasi ini juga mendukung logging yang ditampilkan dari dahshboard Kibana.<br>
+Anda dapat membuka dashboard Kibana dengan url berikut `http://localhost:5601` <br>
+Dengan menggunakan filebeat-logstash-elasticsearch-kibana harapannya kita akan lebih mudah dalam melihat log untuk setiap request yang masuk ke aplikasi ini<br>
+[<img src="https://drive.google.com/uc?export=view&id=1Glz89WQPzp7fYhiRDhbTcK6xWkS-eS1H" width="550"/>](https://drive.google.com/uc?export=view&id=1Glz89WQPzp7fYhiRDhbTcK6xWkS-eS1H)
