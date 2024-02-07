@@ -197,3 +197,132 @@ func TestAddProductHandler(t *testing.T) {
 		assert.Equal(t, "ok", responseBody["status"].(string))
 	})
 }
+
+func TestGetProductsHandler(t *testing.T) {
+	t.Run("test get products error not found", func(t *testing.T) {
+		productService := mck.NewProductServiceMock()
+		productHandler := handler.NewProductHandler(productService)
+
+		app := fiber.New()
+		app.Get("/products", productHandler.GetProducts)
+
+		// mock
+		errorMessage := "record products not found"
+		productService.Mock.On("GetProducts", mock.Anything, mock.Anything, mock.Anything).
+			Return(nil, customError.NewNotFoundError(errorMessage))
+
+		// test
+		// create request
+		request := httptest.NewRequest(http.MethodGet, "/products?sort=name&order=asc", nil)
+
+		// receive response
+		response, err := app.Test(request)
+		assert.Nil(t, err)
+		assert.NotNil(t, response)
+		assert.Equal(t, http.StatusNotFound, response.StatusCode)
+
+		// get responsebody
+		body, err := io.ReadAll(response.Body)
+		responseBody := map[string]any{}
+		json.Unmarshal(body, &responseBody)
+
+		assert.Nil(t, err)
+		assert.Equal(t, "not found", responseBody["status"].(string))
+		assert.Equal(t, errorMessage, responseBody["message"].(string))
+	})
+	t.Run("test get products error bad request", func(t *testing.T) {
+		productService := mck.NewProductServiceMock()
+		productHandler := handler.NewProductHandler(productService)
+
+		app := fiber.New()
+		app.Get("/products", productHandler.GetProducts)
+
+		// mock
+		errorMessage := "error bad request"
+		productService.Mock.On("GetProducts", mock.Anything, mock.Anything, mock.Anything).
+			Return(nil, customError.NewBadRequestError(errorMessage))
+
+		// test
+		request := httptest.NewRequest(http.MethodGet, "/products", nil)
+
+		// receive response
+		response, err := app.Test(request)
+		assert.Nil(t, err)
+		assert.NotNil(t, response)
+		assert.Equal(t, http.StatusBadRequest, response.StatusCode)
+
+		// get responsebody
+		body, err := io.ReadAll(response.Body)
+		responseBody := map[string]any{}
+		json.Unmarshal(body, &responseBody)
+
+		assert.Nil(t, err)
+		assert.Equal(t, "bad request", responseBody["status"].(string))
+		assert.Equal(t, errorMessage, responseBody["message"].(string))
+	})
+	t.Run("test get products error internal server error", func(t *testing.T) {
+		productService := mck.NewProductServiceMock()
+		productHandler := handler.NewProductHandler(productService)
+
+		app := fiber.New()
+		app.Get("/products", productHandler.GetProducts)
+
+		// mock
+		errorMessage := "error internal server"
+		productService.Mock.On("GetProducts", mock.Anything, mock.Anything, mock.Anything).
+			Return(nil, customError.NewInternalSeverError(errorMessage))
+
+		// test
+		request := httptest.NewRequest(http.MethodGet, "/products", nil)
+
+		response, err := app.Test(request)
+		assert.Nil(t, err)
+		assert.NotNil(t, response)
+		assert.Equal(t, http.StatusInternalServerError, response.StatusCode)
+
+		// get responsebody
+		body, err := io.ReadAll(response.Body)
+		responseBody := map[string]any{}
+		json.Unmarshal(body, &responseBody)
+
+		assert.Nil(t, err)
+		assert.Equal(t, errorMessage, responseBody["message"].(string))
+	})
+	t.Run("test get products success", func(t *testing.T) {
+		productService := mck.NewProductServiceMock()
+		productHandler := handler.NewProductHandler(productService)
+
+		app := fiber.New()
+		app.Get("/products", productHandler.GetProducts)
+
+		// mock
+		productService.Mock.On("GetProducts", mock.Anything, mock.Anything, mock.Anything).
+			Return([]dto.ProductDetailResponse{
+				{
+					Id:          1,
+					Name:        "iPhone 12",
+					Price:       12000000,
+					Description: "hp",
+					Quantity:    10,
+					CreatedAt:   "2020-10-10 10:00:00",
+					UpdatedAt:   "2020-10-10 10:00:00",
+				},
+			}, nil)
+
+		// test
+		request := httptest.NewRequest(http.MethodGet, "/products?sort=price&order=asc", nil)
+
+		response, err := app.Test(request)
+		assert.Nil(t, err)
+		assert.NotNil(t, response)
+		assert.Equal(t, http.StatusOK, response.StatusCode)
+
+		// get responsebody
+		body, err := io.ReadAll(response.Body)
+		responseBody := map[string]any{}
+		json.Unmarshal(body, &responseBody)
+
+		assert.Nil(t, err)
+		assert.Equal(t, "ok", responseBody["status"].(string))
+	})
+}

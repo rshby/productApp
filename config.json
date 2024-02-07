@@ -16,6 +16,6 @@
     "port" : 6831
   },
   "logging" : {
-    "path" : "/app/log/log_product.log"
+    "path" : "./log/log_product.log"
   }
 }

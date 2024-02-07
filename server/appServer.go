@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"productApp/app/config"
 	"productApp/app/handler"
+	"productApp/app/middleware"
 	"productApp/app/repository"
 	"productApp/app/service"
 	"productApp/routes"
@@ -30,13 +31,14 @@ func NewAppServer(cfg config.IConfig, validate *validator.Validate, db *sql.DB) 
 	productHandler := handler.NewProductHandler(productService)
 
 	// middleware
+	loggerMiddleware := middleware.LoggerMiddleware(cfg)
 
 	app := fiber.New(fiber.Config{
 		Prefork: false,
 	})
 	app.Use(logger.New())
 
-	v1 := app.Group("/api/v1")
+	v1 := app.Group("/api/v1").Use(loggerMiddleware)
 
 	// generate routes
 	routes.SetProductRoutes(v1, productHandler)

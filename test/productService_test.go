@@ -90,3 +90,182 @@ func TestAddProduct(t *testing.T) {
 		assert.NotNil(t, product)
 	})
 }
+
+func TestGetListProducts(t *testing.T) {
+	t.Run("get products error order not in options", func(t *testing.T) {
+		validate := validator.New()
+		productRepo := mck.NewProductRepoMock()
+		productService := service.NewProductService(validate, productRepo)
+
+		// test
+		products, err := productService.GetProducts(context.Background(), "date", "QWERTY")
+		assert.Nil(t, products)
+		assert.NotNil(t, err)
+		assert.Error(t, err)
+		assert.Equal(t, "order parameter not in options", err.Error())
+	})
+	t.Run("get products error sort not in options", func(t *testing.T) {
+		validate := validator.New()
+		productRepo := mck.NewProductRepoMock()
+		productService := service.NewProductService(validate, productRepo)
+
+		// test
+		products, err := productService.GetProducts(context.Background(), "age", "desc")
+		assert.Nil(t, products)
+		assert.NotNil(t, err)
+		assert.Error(t, err)
+		assert.Equal(t, "sort parameter not in options", err.Error())
+	})
+	t.Run("get products sort date error not found", func(t *testing.T) {
+		validate := validator.New()
+		productRepo := mck.NewProductRepoMock()
+		productService := service.NewProductService(validate, productRepo)
+
+		// mock
+		errorMessage := "record not found"
+		productRepo.Mock.On("GetProductsSortByDate", mock.Anything, mock.Anything).
+			Return(nil, customError.NewNotFoundError(errorMessage))
+
+		// test
+		products, err := productService.GetProducts(context.Background(), "date", "asc")
+		assert.Nil(t, products)
+		assert.NotNil(t, err)
+		assert.Error(t, err)
+	})
+	t.Run("get products sort date success", func(t *testing.T) {
+		validate := validator.New()
+		productRepo := mck.NewProductRepoMock()
+		productService := service.NewProductService(validate, productRepo)
+
+		// mock
+		productRepo.Mock.On("GetProductsSortByDate", mock.Anything, mock.Anything).
+			Return([]entity.Product{
+				{
+					Id:          1,
+					Name:        "iPhone 12",
+					Price:       12000000,
+					Description: "hp",
+					Quantity:    100,
+					CreatedAt:   time.Now(),
+					UpdatedAt:   time.Now(),
+				},
+			}, nil)
+
+		// test
+		products, err := productService.GetProducts(context.Background(), "date", "asc")
+		assert.Nil(t, err)
+		assert.NotNil(t, products)
+		assert.Equal(t, 1, products[0].Id)
+	})
+	t.Run("get products sort price error not found", func(t *testing.T) {
+		validate := validator.New()
+		productRepo := mck.NewProductRepoMock()
+		productService := service.NewProductService(validate, productRepo)
+
+		// mock
+		errorMessage := "record not found"
+		productRepo.Mock.On("GetProductSortByPrice", mock.Anything, mock.Anything).
+			Return(nil, customError.NewNotFoundError(errorMessage))
+
+		// test
+		products, err := productService.GetProducts(context.Background(), "price", "asc")
+		assert.Nil(t, products)
+		assert.NotNil(t, err)
+		assert.Error(t, err)
+		assert.Equal(t, errorMessage, err.Error())
+	})
+	t.Run("get products sort price success", func(t *testing.T) {
+		validate := validator.New()
+		productRepo := mck.NewProductRepoMock()
+		productService := service.NewProductService(validate, productRepo)
+
+		// mock
+		productRepo.Mock.On("GetProductSortByPrice", mock.Anything, mock.Anything).
+			Return([]entity.Product{
+				{
+					Id:          1,
+					Name:        "iPhone 12",
+					Price:       12000000,
+					Description: "hp",
+					Quantity:    100,
+					CreatedAt:   time.Now(),
+					UpdatedAt:   time.Now(),
+				},
+				{
+					Id:          2,
+					Name:        "iPhone 12 Pro",
+					Price:       13000000,
+					Description: "hp",
+					Quantity:    100,
+					CreatedAt:   time.Now(),
+					UpdatedAt:   time.Now(),
+				},
+			}, nil)
+
+		// test
+		products, err := productService.GetProducts(context.Background(), "price", "asc")
+		assert.Nil(t, err)
+		assert.NotNil(t, products)
+		assert.Equal(t, 2, len(products))
+		assert.Equal(t, 1, products[0].Id)
+		productRepo.Mock.AssertExpectations(t)
+	})
+	t.Run("get products sort name error not found", func(t *testing.T) {
+		validate := validator.New()
+		productRepo := mck.NewProductRepoMock()
+		productService := service.NewProductService(validate, productRepo)
+
+		// mock
+		errorMessage := "record no found"
+		productRepo.Mock.On("GetProductSortByName", mock.Anything, mock.Anything).
+			Return(nil, customError.NewNotFoundError(errorMessage))
+
+		// test
+		products, err := productService.GetProducts(context.Background(), "name", "asc")
+		assert.Nil(t, products)
+		assert.NotNil(t, err)
+		assert.Error(t, err)
+		assert.Equal(t, errorMessage, err.Error())
+	})
+	t.Run("get products sort name success", func(t *testing.T) {
+		validate := validator.New()
+		productRepo := mck.NewProductRepoMock()
+		productService := service.NewProductService(validate, productRepo)
+
+		// mock
+		productRepo.Mock.On("GetProductSortByName", mock.Anything, mock.Anything).
+			Return([]entity.Product{
+				{
+					Id:          1,
+					Name:        "iPhone 12",
+					Price:       12000000,
+					Description: "hp",
+					Quantity:    100,
+					CreatedAt:   time.Now(),
+					UpdatedAt:   time.Now(),
+				},
+			}, nil)
+
+		// test
+		products, err := productService.GetProducts(context.Background(), "name", "asc")
+		assert.Nil(t, err)
+		assert.NotNil(t, products)
+		assert.Equal(t, 1, products[0].Id)
+	})
+	t.Run("get products error not found", func(t *testing.T) {
+		validate := validator.New()
+		productRepo := mck.NewProductRepoMock()
+		productService := service.NewProductService(validate, productRepo)
+
+		// mock
+		productRepo.Mock.On("GetProductSortByName", mock.Anything, mock.Anything).
+			Return([]entity.Product{}, nil)
+
+		// test
+		products, err := productService.GetProducts(context.Background(), "name", "asc")
+		assert.Nil(t, products)
+		assert.NotNil(t, err)
+		assert.Error(t, err)
+		assert.Equal(t, "record products not found", err.Error())
+	})
+}

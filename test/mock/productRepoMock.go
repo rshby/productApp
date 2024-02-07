@@ -27,17 +27,38 @@ func (p *ProductRepoMock) Insert(ctx context.Context, input *entity.Product) (*e
 	return value.(*entity.Product), nil
 }
 
+// method mock sort by date
 func (p *ProductRepoMock) GetProductsSortByDate(ctx context.Context, order string) ([]entity.Product, error) {
-	//TODO implement me
-	panic("implement me")
+	args := p.Mock.Called(ctx, order)
+
+	value := args.Get(0)
+	if value == nil {
+		return nil, args.Error(1)
+	}
+
+	return value.([]entity.Product), nil
 }
 
+// method mock sort by price
 func (p *ProductRepoMock) GetProductSortByPrice(ctx context.Context, order string) ([]entity.Product, error) {
-	//TODO implement me
-	panic("implement me")
+	args := p.Mock.Called(ctx, order)
+
+	value := args.Get(0)
+	if value == nil {
+		return nil, args.Error(1)
+	}
+
+	return value.([]entity.Product), nil
 }
 
+// method sort by name
 func (p *ProductRepoMock) GetProductSortByName(ctx context.Context, order string) ([]entity.Product, error) {
-	//TODO implement me
-	panic("implement me")
+	args := p.Mock.Called(ctx, order)
+
+	value := args.Get(0)
+	if value == nil {
+		return nil, args.Error(1)
+	}
+
+	return value.([]entity.Product), nil
 }
