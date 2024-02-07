@@ -1,0 +1,9 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - "/var/log/log_product.log"
+
+output.logstash:
+  hosts: ["logstash:5044"]
+  enabled: true

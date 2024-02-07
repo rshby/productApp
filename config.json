@@ -5,17 +5,17 @@
     "port" : 5005
   },
   "database" : {
-    "host" : "localhost",
+    "host" : "product-mysql",
     "user" : "root",
     "password" : "root",
     "port" : 3306,
     "name" : "product_db"
   },
   "jaeger" : {
-    "host" : "localhost",
+    "host" : "product-jaeger",
     "port" : 6831
   },
   "logging" : {
-    "path" : "./log/log_product.log"
+    "path" : "/app/log/log_product.log"
   }
 }
